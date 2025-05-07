@@ -1,14 +1,14 @@
-# 使用官方 Node.js 映像作為基礎
-FROM node:22
+FROM node:22-alpine
 
-# 設定工作目錄
 WORKDIR /app
 
-# 複製檔案到容器
-COPY . .
+# 複製 Nuxt build 完的輸出與必要檔案
+COPY ./my-app/.output ./.output
+COPY ./my-app/package*.json ./
 
-# 安裝依賴（這裡沒有需要安裝的）
-RUN npm install
+# 安裝 production 相依
+RUN npm install --production
 
-# 設定啟動指令
-CMD ["npm", "start"]
+EXPOSE 3000
+
+CMD ["node", ".output/server/index.mjs"]
